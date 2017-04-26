@@ -24,21 +24,26 @@ plt.scatter(grade_slow, bumpy_slow, color = "r", label="slow")
 plt.legend()
 plt.xlabel("bumpiness")
 plt.ylabel("grade")
-plt.show()
+# plt.show()
 ################################################################################
 
+def printAccuracyAndPlot(clf,name):
+    clf.fit(features_train, labels_train)
+    pred = clf.predict(features_test)
+    photo_name = name+".png"
+    accuracy = metrics.accuracy_score(labels_test, pred)
+    # f = open("accuracy.txt", "a+")
+    # f.write("\n"+name+"- %.3f" % accuracy)
+    print "accuracy:-", accuracy
+    try:
+        prettyPicture(clf, features_test, labels_test, photo_name)
+    except NameError:
+        pass
 
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
+from sklearn import neighbors, ensemble,metrics,naive_bayes,svm
+clf = svm.SVC(C=1000,gamma=2)
+printAccuracyAndPlot(clf,"svc+C=1000")
 
 
-
-
-
-
-
-
-try:
-    prettyPicture(clf, features_test, labels_test)
-except NameError:
-    pass

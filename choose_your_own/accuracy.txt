@@ -1,0 +1,5 @@
+naive bayes- 0.884
+svc- 0.920
+kn- 0.920
+randomforest- 0.916
+adaboost- 0.924

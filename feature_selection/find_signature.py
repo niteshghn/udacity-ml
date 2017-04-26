@@ -20,7 +20,8 @@ authors = pickle.load( open(authors_file, "r") )
 ### feature matrices changed to dense representations for compatibility with
 ### classifier functions in versions 0.15.2 and earlier
 from sklearn import cross_validation
-features_train, features_test, labels_train, labels_test = cross_validation.train_test_split(word_data, authors, test_size=0.1, random_state=42)
+from sklearn import model_selection
+features_train, features_test, labels_train, labels_test = model_selection.train_test_split(word_data, authors, test_size=0.1, random_state=42)
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer(sublinear_tf=True, max_df=0.5,
@@ -28,6 +29,15 @@ vectorizer = TfidfVectorizer(sublinear_tf=True, max_df=0.5,
 features_train = vectorizer.fit_transform(features_train)
 features_test  = vectorizer.transform(features_test).toarray()
 
+print vectorizer.get_feature_names()[21323]
+# from matplotlib import pyplot
+# pyplot.scatter(features_train,labels_train)
+# pyplot.xlabel('features train')
+# pyplot.ylabel('label train')
+# pyplot.title('About as simple as it gets, folks')
+# pyplot.grid(True)
+# pyplot.savefig("test.png")
+# pyplot.show()
 
 ### a classic way to overfit is to use a small number
 ### of data points and a large number of features;
@@ -39,5 +49,21 @@ labels_train   = labels_train[:150]
 
 ### your code goes here
 
+# print features_train
+# print "======================"
+# print features_test
+
+from sklearn.tree import DecisionTreeClassifier
+clf = DecisionTreeClassifier()
+clf.fit(features_train,labels_train)
+print "accuracy of tree is %s." % clf.score(features_test,labels_test)
+
+importances = clf.feature_importances_
+
+import numpy as np
+indices = np.argsort(importances)[::-1]
+print 'Feature Ranking: '
+for i in range(10):
+    print "{} feature no.{} ({})".format(i+1,indices[i],importances[indices[i]])
 
 
